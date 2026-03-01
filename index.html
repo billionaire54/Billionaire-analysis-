@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forex Analyzer</title>
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  color: white;
+  text-align: center;
+}
+section { padding: 50px 20px; }
+.hidden { display: none; }
+
+.get-started {
+  background:#00d4aa;
+  color:black;
+  padding:15px 40px;
+  font-size:20px;
+  font-weight:bold;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.select-currency, .upload-section, .analyze-btn {
+  margin-top:20px;
+}
+
+input[type=file] {
+  padding:10px;
+  border-radius:6px;
+}
+
+button {
+  padding:12px 25px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  margin-top:15px;
+  cursor:pointer;
+}
+
+.results-box {
+  margin-top:30px;
+  background:white;
+  color:black;
+  padding:25px;
+  border-radius:15px;
+}
+</style>
+</head>
+<body>
+
+<!-- Landing Page -->
+<section id="home">
+  <h1>Welcome to Your Forex Analyzer</h1>
+  <p>Click below to start</p>
+  <button class="get-started" onclick="showCurrency()">Get Started</button>
+</section>
+
+<!-- Currency Selection -->
+<section id="currencyPage" class="hidden">
+  <h2>Select Currency / Asset</h2>
+  <select id="currencySelect" class="select-currency" onchange="showUpload()">
+    <option value="">-- Select Currency --</option>
+    <option value="BTC">Bitcoin (BTC)</option>
+    <option value="GOLD">Gold</option>
+    <option value="EUR">Euro (EUR)</option>
+    <option value="USD">US Dollar (USD)</option>
+    <option value="GBP">British Pound (GBP)</option>
+    <option value="JPY">Japanese Yen (JPY)</option>
+  </select>
+
+  <div id="uploadSection" class="hidden upload-section">
+    <p>Upload your chart image:</p>
+    <input type="file" id="chartFile" accept="image/*"><br>
+    <button class="analyze-btn" onclick="analyzeMarket()">Analyze</button>
+  </div>
+
+  <div id="results" class="hidden results-box"></div>
+</section>
+
+<script>
+function showCurrency() {
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('currencyPage').classList.remove('hidden');
+}
+
+function showUpload() {
+  let currency = document.getElementById('currencySelect').value;
+  if(currency) {
+    document.getElementById('uploadSection').classList.remove('hidden');
+  } else {
+    document.getElementById('uploadSection').classList.add('hidden');
+    document.getElementById('results').classList.add('hidden');
+  }
+}
+
+// Mock analysis logic
+function analyzeMarket() {
+  let currency = document.getElementById('currencySelect').value;
+  if(!currency) { alert("Select a currency!"); return; }
+
+  // For now, we generate random signals
+  const actions = ["Buy", "Sell", "Hold"];
+  const action = actions[Math.floor(Math.random()*actions.length)];
+  const sl = (Math.random()*10 + 90).toFixed(2);
+  const tp = (Math.random()*10 + 100).toFixed(2);
+
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = `<h3>${currency} Signal</h3>
+                          <p>Action: <b>${action}</b></p>
+                          <p>Stop Loss (SL): <b>${sl}</b></p>
+                          <p>Take Profit (TP): <b>${tp}</b></p>`;
+  resultsDiv.classList.remove('hidden');
+}
+</script>
+
+</body>
+  </html>
