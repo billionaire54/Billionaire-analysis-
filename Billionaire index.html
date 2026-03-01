@@ -1,123 +1,299 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forex Analyzer</title>
-<style>
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
-  color: white;
-  text-align: center;
-}
-section { padding: 50px 20px; }
-.hidden { display: none; }
 
-.get-started {
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins', Arial, sans-serif;
+  background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  color:white;
+}
+
+header{
+  text-align:center;
+  padding:30px 20px;
+}
+
+header h1{
+  font-size:28px;
+  margin:0;
+  font-weight:700;
+}
+
+section{
+  padding:30px 15px;
+}
+
+.hidden{display:none;}
+
+button{
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.get-started{
   background:#00d4aa;
   color:black;
-  padding:15px 40px;
-  font-size:20px;
-  font-weight:bold;
+  padding:14px 30px;
   border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.select-currency, .upload-section, .analyze-btn {
+  border-radius:12px;
+  font-size:18px;
+  font-weight:600;
   margin-top:20px;
 }
 
-input[type=file] {
-  padding:10px;
-  border-radius:6px;
+.get-started:hover{
+  transform:scale(1.05);
 }
 
-button {
+.network-btn{
+  padding:14px 25px;
+  margin:10px;
+  border:none;
+  border-radius:12px;
+  font-weight:600;
+  font-size:16px;
+}
+
+.mtn{background:#ffcc00;color:black;}
+.telecel{background:#e60000;color:white;}
+.at{background:#007bff;color:white;}
+
+.bundle-card{
+  background:#1e1c3a;
+  padding:20px;
+  margin:15px auto;
+  border-radius:15px;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.bundle-card:hover{
+  transform:scale(1.02);
+}
+
+.bundle-card h3{
+  margin:0 0 8px 0;
+}
+
+.bundle-card small{
+  opacity:0.7;
+}
+
+input{
+  width:90%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
+  border:none;
+}
+
+.place-btn{
+  background:#00d4aa;
+  color:black;
   padding:12px 25px;
   border:none;
-  border-radius:8px;
-  font-weight:bold;
-  margin-top:15px;
-  cursor:pointer;
+  border-radius:12px;
+  font-weight:600;
+  margin:10px;
 }
 
-.results-box {
-  margin-top:30px;
+.back-btn{
+  background:#ff4d4d;
+  color:white;
+  padding:12px 25px;
+  border:none;
+  border-radius:12px;
+  font-weight:600;
+  margin:10px;
+}
+
+.success-box{
   background:white;
   color:black;
-  padding:25px;
-  border-radius:15px;
+  padding:30px;
+  border-radius:20px;
+  width:90%;
+  max-width:400px;
+  margin:20px auto;
+  text-align:center;
+}
+
+.testimonial-section{
+  background:white;
+  color:black;
+  border-radius:20px;
+  padding:25px 15px;
+  width:90%;
+  max-width:500px;
+  margin:30px auto;
+  text-align:left;
+}
+
+.testimonial-section h2{
+  text-align:center;
+}
+
+.whatsapp{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#25d366;
+  color:white;
+  padding:15px;
+  border-radius:50%;
+  text-decoration:none;
+  font-size:22px;
+  text-align:center;
 }
 </style>
 </head>
+
 <body>
 
-<!-- Landing Page -->
-<section id="home">
-  <h1>Welcome to Your Forex Analyzer</h1>
-  <p>Click below to start</p>
-  <button class="get-started" onclick="showCurrency()">Get Started</button>
+<header>
+  <h1>Forex Analyzer</h1>
+  <button class="get-started" onclick="showNetwork()">Get Started</button>
+</header>
+
+<!-- SELECT CURRENCY -->
+<section id="networkPage" class="hidden">
+  <h2>Select Currency</h2>
+  <button class="network-btn mtn" onclick="loadBundles('BTCUSD')">Bitcoin</button>
+  <button class="network-btn telecel" onclick="loadBundles('XAUUSD')">Gold</button>
+  <button class="network-btn at" onclick="loadBundles('EURUSD')">EUR/USD</button>
+  <button class="network-btn at" onclick="loadBundles('USDJPY')">USD/JPY</button>
+  <br>
+  <button class="back-btn" onclick="goHome()">← Back</button>
 </section>
 
-<!-- Currency Selection -->
-<section id="currencyPage" class="hidden">
-  <h2>Select Currency / Asset</h2>
-  <select id="currencySelect" class="select-currency" onchange="showUpload()">
-    <option value="">-- Select Currency --</option>
-    <option value="BTC">Bitcoin (BTC)</option>
-    <option value="GOLD">Gold</option>
-    <option value="EUR">Euro (EUR)</option>
-    <option value="USD">US Dollar (USD)</option>
-    <option value="GBP">British Pound (GBP)</option>
-    <option value="JPY">Japanese Yen (JPY)</option>
-  </select>
+<!-- CHART UPLOAD -->
+<section id="bundlesPage" class="hidden">
+  <h2>Upload Your Chart</h2>
+  <p>Select the chart image to analyze</p>
+  <input type="file" id="chartFile" accept="image/*">
+  <br>
+  <button class="place-btn" onclick="analyzeChart()">Analyze</button>
+  <button class="back-btn" onclick="backToNetwork()">← Back</button>
+</section>
 
-  <div id="uploadSection" class="hidden upload-section">
-    <p>Upload your chart image:</p>
-    <input type="file" id="chartFile" accept="image/*"><br>
-    <button class="analyze-btn" onclick="analyzeMarket()">Analyze</button>
+<!-- ANALYSIS RESULT -->
+<section id="orderPage" class="hidden">
+  <h2>Analysis Result</h2>
+  <div class="bundle-card" id="analysisResult">
+    <h3 id="signal">Signal: --</h3>
+    <p id="stopLoss">Stop Loss: --</p>
+    <p id="takeProfit">Take Profit: --</p>
   </div>
-
-  <div id="results" class="hidden results-box"></div>
+  <button class="back-btn" onclick="backToBundles()">← Back</button>
 </section>
+
+<!-- SUCCESS -->
+<section id="successPage" class="hidden">
+  <div class="success-box">
+    <h2>✔ Analysis Ready!</h2>
+    <p id="orderID"></p>
+    <p>Send your analysis:</p>
+    <button class="place-btn" onclick="sendSMS()">📩 SMS</button><br>
+    <button class="place-btn" onclick="sendWhatsApp()">💬 WhatsApp</button><br><br>
+    <button class="back-btn" onclick="goHome()">Close</button>
+  </div>
+</section>
+
+<section>
+  <div class="testimonial-section">
+    <h2>⭐ Trusted by Traders</h2>
+    <p>“Fast and accurate signals. Highly recommended!”<br><b>- Akwesi Soja</b></p>
+    <p>“I always use this analyzer for my trades.”<br><b>- Emmanuela Tey</b></p>
+    <p>“Professional and reliable tool for trading.”<br><b>- Kofi Banana</b></p>
+  </div>
+</section>
+
+<a href="https://wa.me/233542021230" class="whatsapp">💬</a>
 
 <script>
-function showCurrency() {
-  document.getElementById('home').classList.add('hidden');
-  document.getElementById('currencyPage').classList.remove('hidden');
+let selectedCurrency="";
+let orderMessage="";
+
+function showNetwork(){
+  document.getElementById("networkPage").classList.remove("hidden");
+  document.querySelector("header").classList.add("hidden");
 }
 
-function showUpload() {
-  let currency = document.getElementById('currencySelect').value;
-  if(currency) {
-    document.getElementById('uploadSection').classList.remove('hidden');
-  } else {
-    document.getElementById('uploadSection').classList.add('hidden');
-    document.getElementById('results').classList.add('hidden');
+function goHome(){
+  document.querySelector("header").classList.remove("hidden");
+  document.getElementById("networkPage").classList.add("hidden");
+  document.getElementById("bundlesPage").classList.add("hidden");
+  document.getElementById("orderPage").classList.add("hidden");
+  document.getElementById("successPage").classList.add("hidden");
+}
+
+function loadBundles(currency){
+  selectedCurrency = currency;
+  document.getElementById("networkPage").classList.add("hidden");
+  document.getElementById("bundlesPage").classList.remove("hidden");
+}
+
+function backToNetwork(){
+  document.getElementById("bundlesPage").classList.add("hidden");
+  document.getElementById("networkPage").classList.remove("hidden");
+}
+
+function backToBundles(){
+  document.getElementById("orderPage").classList.add("hidden");
+  document.getElementById("bundlesPage").classList.remove("hidden");
+}
+
+// Call MT5 API (placeholder)
+async function analyzeChart(){
+  const chart = document.getElementById("chartFile").files[0];
+  if(!chart){
+    alert("Please upload your chart first!");
+    return;
+  }
+
+  document.getElementById("signal").innerText = "Analyzing...";
+  document.getElementById("stopLoss").innerText = "";
+  document.getElementById("takeProfit").innerText = "";
+
+  // Placeholder for real MT5 API call
+  // Replace URL with your server endpoint connected to MT5
+  try{
+    const response = await fetch(`https://your-mt5-api.com/signal?pair=${selectedCurrency}`);
+    const data = await response.json();
+
+    document.getElementById("signal").innerText = "Signal: " + data.signal;
+    document.getElementById("stopLoss").innerText = "Stop Loss: " + data.stopLoss;
+    document.getElementById("takeProfit").innerText = "Take Profit: " + data.takeProfit;
+
+    // Show result section
+    document.getElementById("bundlesPage").classList.add("hidden");
+    document.getElementById("orderPage").classList.remove("hidden");
+
+    orderMessage = `Forex Analysis - ${selectedCurrency}%0ASignal: ${data.signal}%0AStop Loss: ${data.stopLoss}%0ATake Profit: ${data.takeProfit}`;
+  }catch(err){
+    alert("Error fetching MT5 signal. Make sure your API is set up.");
+    console.error(err);
   }
 }
 
-// Mock analysis logic
-function analyzeMarket() {
-  let currency = document.getElementById('currencySelect').value;
-  if(!currency) { alert("Select a currency!"); return; }
+function sendSMS(){
+  window.location.href = `sms:0542021230?body=${orderMessage}`;
+}
 
-  // For now, we generate random signals
-  const actions = ["Buy", "Sell", "Hold"];
-  const action = actions[Math.floor(Math.random()*actions.length)];
-  const sl = (Math.random()*10 + 90).toFixed(2);
-  const tp = (Math.random()*10 + 100).toFixed(2);
-
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = `<h3>${currency} Signal</h3>
-                          <p>Action: <b>${action}</b></p>
-                          <p>Stop Loss (SL): <b>${sl}</b></p>
-                          <p>Take Profit (TP): <b>${tp}</b></p>`;
-  resultsDiv.classList.remove('hidden');
+function sendWhatsApp(){
+  window.location.href = `https://wa.me/233542021230?text=${orderMessage}`;
 }
 </script>
 
 </body>
-  </html>
+</html>
